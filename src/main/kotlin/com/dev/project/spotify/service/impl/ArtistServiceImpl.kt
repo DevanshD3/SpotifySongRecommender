@@ -2,6 +2,7 @@ package com.dev.project.spotify.service.impl
 
 import com.dev.project.spotify.client.ArtistClient
 import com.dev.project.spotify.client.response.Artist
+import com.dev.project.spotify.client.response.Song
 import com.dev.project.spotify.service.ArtistService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
@@ -38,5 +39,17 @@ class ArtistServiceImpl(
         val uniqueArtists = artists.distinctBy { it.id }
 
         return uniqueArtists.sortedByDescending { it.popularity }
+    }
+
+    override suspend fun getTopSongsForArtists(artistsIds: List<String>): List<Song>{
+        val songs = mutableListOf<Song>()
+        withContext(Dispatchers.IO) {
+            artistsIds.map { id ->
+                async {
+                    songs.addAll(artistClient.getTopSongsByArtists(id))
+                }
+            }.awaitAll()
+        }
+        return songs
     }
 }

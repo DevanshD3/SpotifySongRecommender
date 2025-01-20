@@ -1,14 +1,11 @@
 package com.dev.project.spotify.controller
 
 import com.dev.project.spotify.client.response.Artist
+import com.dev.project.spotify.client.response.Song
 import com.dev.project.spotify.service.ArtistService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/artist")
@@ -31,4 +28,13 @@ class ArtistController(
             artistService.getAllArtistsByGenres(genres)
         }
     }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @GetMapping("/top-songs")
+    suspend fun getTopSongsForArtists(@RequestParam artistIds: List<String>): List<Song> {
+        return withContext(Dispatchers.IO) {
+            artistService.getTopSongsForArtists(artistIds)
+        }
+    }
+
 }
