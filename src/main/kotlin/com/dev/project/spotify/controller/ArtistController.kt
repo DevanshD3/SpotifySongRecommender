@@ -23,4 +23,12 @@ class ArtistController(
             artistService.getArtistInfo(spotifyId)
         }
     }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @GetMapping("/genres/{genres}")
+    suspend fun getArtistsByGenres(@PathVariable genres: List<String>): List<Artist> {
+        return withContext(Dispatchers.IO){
+            artistService.getAllArtistsByGenres(genres)
+        }
+    }
 }
