@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import java.lang.StringBuilder
+import java.time.Instant
 
 @Component
 class CredentialsClient(
@@ -18,7 +19,15 @@ class CredentialsClient(
     private val webClientBuilder: WebClient.Builder,
     private val objectMapper: ObjectMapper
 ) {
+
+    private var cachedCredentials: Credentials? = null
+    private var tokenExpirationTime: Instant? = null
+
     suspend fun getCredentials(): Credentials {
+        val currentTime = Instant.now()
+        if (cachedCredentials != null && tokenExpirationTime?.isAfter(currentTime) == true) {
+            return cachedCredentials!!
+        }
         val url = "https://accounts.spotify.com/api/token"
         val body = "grant_type=client_credentials&client_id=$clientId&client_secret=$clientSecret"
 
@@ -32,7 +41,11 @@ class CredentialsClient(
             .bodyToMono(String::class.java)
             .awaitSingle()
 
-        return objectMapper.readValue(response, Credentials::class.java)
+        val credentials = objectMapper.readValue(response, Credentials::class.java)
+
+        cachedCredentials = credentials
+        tokenExpirationTime = currentTime.plusSeconds(credentials.expiresIn!!)
+        return credentials
     }
 
 }

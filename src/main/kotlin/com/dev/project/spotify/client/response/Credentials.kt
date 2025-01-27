@@ -11,5 +11,5 @@ data class Credentials(
     val tokenType: String?,
 
     @JsonProperty("expires_in")
-    val expiresIn: Int?
+    val expiresIn: Long?
 )

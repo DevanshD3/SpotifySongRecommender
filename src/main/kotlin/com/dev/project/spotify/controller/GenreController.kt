@@ -13,7 +13,7 @@ class GenreController(
     private val genreService: GenreService
 ) {
 
-    @CrossOrigin(origins = ["http://localhost:3000"])
+    @CrossOrigin(origins = ["http://localhost:5173"])
     @GetMapping("/all")
     suspend fun getAllGenres(): List<GenreDetails> {
         return genreService.getAllGenres()
