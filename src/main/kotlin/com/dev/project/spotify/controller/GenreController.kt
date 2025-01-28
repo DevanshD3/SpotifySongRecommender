@@ -13,7 +13,7 @@ class GenreController(
     private val genreService: GenreService
 ) {
 
-    @CrossOrigin(origins = ["http://localhost:5173"])
+    @CrossOrigin(origins = ["http://localhost:5173", "https://spotify-recommendation-app.vercel.app/"])
     @GetMapping("/all")
     suspend fun getAllGenres(): List<GenreDetails> {
         return genreService.getAllGenres()

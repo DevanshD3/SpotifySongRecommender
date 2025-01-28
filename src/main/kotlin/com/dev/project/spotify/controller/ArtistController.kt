@@ -13,7 +13,7 @@ class ArtistController(
     private val artistService: ArtistService
 ) {
 
-    @CrossOrigin(origins = ["http://localhost:5173"])
+    @CrossOrigin(origins = ["http://localhost:5173", "https://spotify-recommendation-app.vercel.app/"])
     @GetMapping("/info/{spotifyId}")
     suspend fun getArtistInfo(@PathVariable spotifyId: String): Artist {
         return withContext(Dispatchers.IO){
@@ -21,7 +21,7 @@ class ArtistController(
         }
     }
 
-    @CrossOrigin(origins = ["http://localhost:5173"])
+    @CrossOrigin(origins = ["http://localhost:5173", "https://spotify-recommendation-app.vercel.app/"])
     @GetMapping("/genres/{genres}")
     suspend fun getArtistsByGenres(@PathVariable genres: List<String>): List<Artist> {
         return withContext(Dispatchers.IO){
@@ -29,7 +29,7 @@ class ArtistController(
         }
     }
 
-    @CrossOrigin(origins = ["http://localhost:5173"])
+    @CrossOrigin(origins = ["http://localhost:5173", "https://spotify-recommendation-app.vercel.app/"])
     @GetMapping("/top-songs")
     suspend fun getTopSongsForArtists(@RequestParam artistIds: List<String>): List<Song> {
         return withContext(Dispatchers.IO) {
