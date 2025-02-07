@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration
 class CacheConfig {
     @Bean
     fun cacheManager(): CacheManager {
-        return ConcurrentMapCacheManager("genres")
+        return ConcurrentMapCacheManager("genre-artist-mapping")
     }
 }
